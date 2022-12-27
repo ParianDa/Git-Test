@@ -1,0 +1,674 @@
+day 1
+
+nodejs uses the v8 engine of chrome, which takes the
+javascript code for compilation and convert it into
+machine code.
+
+
+// console.log("My first node js code ! ");
+
+
+const fs = require('fs');
+
+fs.writeFileSync('hello.txt','Hello from node js');
+
+what we use server for ?
+
+database, authentication, input validation, business logic.
+
+request from browser and give response as a html page to the
+browser
+
+node.js is a javascript runtime
+
+you can use it for more than just server side code
+and  utility scripts, build tools ...
+
+Run server
+
+run server
+create server and listen to incoming requests,
+
+business logic
+handle requests validate input, connect to database.
+
+Responses
+return responses (rendered html, json)
+
+
+alternatives - python, laravel, nodejs, ruby rails, asp.net
+
+
+THE REPL
+
+read - read user input
+eval - evaluate user input
+print - print output
+loop - wait for new input
+
+javascript refreshment
+
+// const name = 'Pavel';
+// let age = 29;
+// const hasHobbies = true;
+
+// age = 25;
+// // cannot assign value to const variable
+// // name = lolwa;
+// function summarizeUser(userName, userAge, userHasHobby) {
+//     return (
+//         'Name is ' + userName + ', age is ' + userAge +
+//         ' and the user has hobbies: ' + userHasHobby
+//     );
+// }
+
+// console.log(summarizeUser(name,age,hasHobbies));
+// const add = (a,b) => a + b;
+// const addone = a => a + 1;
+// const addRandom = () => 1 + 2;
+// console.log(add(1,2));
+// console.log(addone(1));
+// console.log(addRandom());
+
+// const person = {
+//     name: 'Pavel',
+//     age: 29,
+//     greet() {
+//         console.log('Hi, I am ' + this.name  );
+//     }
+// };
+
+// person.greet();
+
+const hobbies = ['sports', 'Cooking'];
+
+console.log(hobbies.map(hobby => 'Hobby : ' + hobby));
+console.log(hobbies);
+
+hobbies.push('Programming');
+console.log(hobbies);
+
+https://academind.com/learn/javascript/reference-vs-primitive-values/
+
+
+
+
+day 2 
+
+rest and spread operator
+
+
+const person = {
+    name: 'Pavel',
+    age: 29,
+    greet() {
+        console.log('Hi, I am ' + this.name  );
+    }
+};
+
+//spread operator
+const copiedPerson = {...person}
+console.log(copiedPerson)
+
+const hobbies = ['sports', 'Cooking'];
+
+//spread operator
+const copiedArray = [...hobbies];
+console.log(copiedArray);
+
+
+
+//using the rest operator as the function
+const toArray = (...args) => {
+    return args;
+}
+
+console.log(toArray(1,2,3,4,5,6,7));
+
+
+//object destruction
+
+const {name,age} = person
+console.log(name, age)
+
+const hobbies = ['sports', 'Cooking'];
+
+
+//array destructuring
+
+const [hobby1, hobby2] = hobbies;
+console.log(hobby1, hobby2)
+
+//example of asynchronous function
+
+const fetchData = callback => {
+    setTimeout(() => {
+        callback("Done")
+    }, 1500);
+}
+
+setTimeout(() => {
+    console.log("timer is done !")
+    fetchData(text => {
+        console.log(text);
+    })
+}, 2000)
+
+
+// with the help of a promise
+
+const fetchData = () => {
+    const promise = new Promise((resolve, reject) => {
+        setTimeout(() => {
+            resolve("Done !")
+        }, 1500)
+    })
+    return promise;
+}
+
+
+setTimeout(()=>{
+   console.log("timer is done ! ");
+   fetchData()
+   .then(text => {
+       console.log(text);
+       //this will return as promise
+       return fetchData();
+   })//this then refers to the above fetchData() promise call
+   .then(text2 => {
+       console.log(text2);
+   });
+}, 2000)
+
+
+//Template literals
+
+const name = "Pavel";
+const age = 29;
+
+console.log(`His name is - ${name} and he loves to code, still at the age of : ${age}`)
+
+
+NODE JS BASICS
+
+core modules
+
+http - launch a serve, send requests
+https - launch a SSL server
+fs
+path
+os
+
+//my first node js app
+const http = require('http');
+
+
+const server = http.createServer((req,res) => {
+    console.log(req);
+})
+
+server.listen(3000)
+
+node.js program lifecycle
+
+
+node app.js -> start script -> parse code, register varibles and function
+-> event loop -> keeps on running as long as there are event listeners
+registered.
+
+to break through the event loop or stop the server
+use process.exit()
+
+console.log(req.url, req.method, req.headers);
+
+/test GET {
+  host: 'localhost:3000',
+  connection: 'keep-alive',
+  'sec-ch-ua': '" Not A;Brand";v="99", "Chromium";v="96", "Google Chrome";v="96"',
+  'sec-ch-ua-mobile': '?0',
+  'sec-ch-ua-platform': '"Linux"',
+  'upgrade-insecure-requests': '1',
+  'user-agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36',
+  accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
+  'sec-fetch-site': 'none',
+  'sec-fetch-mode': 'navigate',
+  'sec-fetch-user': '?1',
+  'sec-fetch-dest': 'document',
+  'accept-encoding': 'gzip, deflate, br',
+  'accept-language': 'en-GB,en-US;q=0.9,en;q=0.8'
+}
+
+/test is the request url,
+GET is the request method
+{ host.....} are the request headers
+
+
+DAY 3
+
+//my first node js app
+const http = require('http');
+
+
+const server = http.createServer((req,res) => {
+    // console.log(req.url, req.method, req.headers);
+    const url = req.url;
+    if ( url === '/') {
+        res.write('<html>');
+        res.write('<head><title>Enter message</title></head>');
+        res.write('<body><form action="/message" method="POST"><input type="text" name="message"><button type="submit">send</button></form>')
+        res.write('</html>');
+        return res.end();
+    }
+    res.setHeader('Content-Type', 'text/html');
+    res.write('<html>');
+    res.write('<head><title>My first page</title></head>');
+    res.write('<body><h1>Hola ! mucho gusto ! </h1></body>');
+    res.end();
+})
+
+server.listen(3000)
+
+if we write localhost:3000/ or localhost:3000, will enter into the if
+stament, and when we write something in the input of the form.
+
+it will direct the form to /message, and furthe execute the setheader
+code.
+
+
+if(url === '/message' && method === 'POST') {
+        fs.writeFileSync('message.txt','DUMMY');
+        res.statusCode = 302;
+        res.setHeader('Location', '/');
+        return res.end();
+        
+
+    }
+
+will redirect to localhost 200
+
+buffer, stream model
+
+if(url === '/message' && method === 'POST') {
+
+        //enabling the user to write input and save it in a file
+        //nodejs parses the data
+        const body = [];
+        //act as buffer
+        req.on('data', (chunk) => {
+            console.log(chunk);
+            body.push(chunk);
+        });
+        //processing the array at the end
+        //event listeners, when done parsing
+        req.on('end', () => {
+            const parsedBody = Buffer.concat(body).toString();
+            const message = parsedBody.split('=')[1];
+            fs.writeFileSync('message.txt',message);
+
+        })
+        
+        res.statusCode = 302;
+        res.setHeader('Location', '/');
+        return res.end();
+    }
+
+
+
+event handlers are put on regsters before execution, but the below
+code will run, therefore to avoid that error, we return the event
+handlers when nodejs is done parsing
+
+return req.on('end', () => {
+            const parsedBody = Buffer.concat(body).toString();
+            const message = parsedBody.split('=')[1];
+            fs.writeFileSync('message.txt',message);
+            res.statusCode = 302;
+            res.setHeader('Location', '/');
+            return res.end();
+
+        })
+        
+blocking and non blocking code: 
+writeFileSync is a blocking code, it will execute first, if not 
+it will further block the execution of rest other code.
+
+thus to avoid this, we use writeFile method.
+
+like this
+
+fs.writeFile('message.txt',message, err => {
+                res.statusCode = 302;
+            res.setHeader('Location', '/');
+            return res.end();
+
+            });
+            
+            see call back, event loop, single thread video tommorrow   
+            
+
+
+BEEN A FEVER WEEK, NOW YOU CAN CONTINUE
+
+
+DAY 4:
+
+The Node module system
+
+
+two ways of exporting a file.
+
+we cannot create objects of the exports file, instead we can call function that might do the
+editing for us. we see that later !
+
+// module.exports = reqestHandler;
+
+module.exports = {
+    handler: reqestHandler,
+    someText: "Some hard coded text ! "
+}
+
+
+my solution
+const requestHandler = (req, res) => {
+
+    const url = req.url;
+    const method = req.method;
+
+    if( url === '/') {
+        res.write('<html>');
+        res.write('<head><title>Greetings</title></head>');
+        res.write('<body><h1>Hello Pavel</h1><br><form method="POST" action="/create-user"><input type="text" name="username"><button type="submit">send</button></form></body>')
+        res.write('</html>')
+        res.end();
+    }
+
+    if( url === '/users') {
+        //dummy users
+        res.write('<html>');
+        res.write('<head><title>Dummy user</title></head>');
+        res.write('<body><ul><li>User 1</li></ul</body>');
+        res.write('</html>');
+    }
+
+    if( url === '/create-user' && method === 'POST') {
+        
+        //parsing data in the console
+
+        const body = [];
+
+        req.on('data', (chunk)=>{
+            //loggin user on the console
+            console.log(chunk);
+            body.push(chunk);
+
+            const parseBody = Buffer.concat(body).toString();
+            console.log(parseBody);
+        })
+    }
+}
+
+module.exports = requestHandler;
+
+
+what is the error ? 
+
+haven't set the status code and header !
+
+like this ...
+
+// Send a HTML response with some "Page not found text
+  if (url === '/create-user') {
+    const body = [];
+    req.on('data', chunk => {
+      body.push(chunk);
+    });
+    req.on('end', () => {
+      const parsedBody = Buffer.concat(body).toString();
+      console.log(parsedBody.split('=')[1]); // username=whatever-the-user-entered
+    });
+    res.statusCode = 302;
+    res.setHeader('Location', '/');
+    res.end();
+  }
+});
+
+
+day 5 : 
+
+
+
+IMPROVED DEVELOPMENT WORKFLOW AND DEBUGGING
+
+npm init
+
+in package json 
+"start":"node app.js"
+
+then 
+
+
+npm start
+//custon run script
+
+npm run start-server
+
+to install a third party package
+
+npm install nodemon --save-dev
+
+Global features: Keywords like const or function but also some global objects like process
+
+Core Node.js Modules: Examples would be the file-system module ("fs"), the path module ("path") or the Http module ("http")
+
+Third-party Modules: Installed via npm install - you can add any kind of feature to your app via this way
+
+
+install globally nodemon
+
+npm install nodemon -g
+
+to start app using node in vs code ! not as per the video
+
+just type this command !
+
+nodemon app.js --config
+
+to add launch.json
+
+run -> add config -> nodeJs
+
+then in launch.json
+
+"restart": true,
+            "runtimeExecutable": "nodemon",
+            "console": "integratedTerminal"
+            
+some theory
+
+NPM :
+
+npm stands for node package manager and it allows you to manage your node project
+and its dependencies
+
+you can initialize a project with npm init
+
+npm scripts can be defined in the package.json to give you shortcuts to command
+tasks and command
+
+
+3rd party packages
+
+node porjects typically don't just use core modules and custome code
+but also 3rd party packages
+
+you install them via npm
+you can differentiate between production deoendencies (--save)
+development dependencies (--save-dev) and globa; dependecnies
+(-g)
+
+debugging
+
+Use the vs code node debugger to step into your code and go through it step by step
+analyze variable values at runtime
+look into and manipulate variables at runtime
+set breakpoints cleverly
+
+(i.e. respect the async/ event - driven nature ?? see later)
+
+
+next lecture - express js !
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
